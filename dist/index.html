@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DualStream | YouTube Dual Live Chat Hub</title>
+  <meta name="description" content="Simultaneous dual YouTube live chat viewer for multi-streamers. Fully responsive for desktop, tablet, mobile, and OBS Studio browser sources.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="/assets/index-CkQROwnV.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-88sUm82P.css">
+</head>
+<body class="theme-dark">
+  <div id="app" class="app-container">
+    <!-- Top Header & Global Controls -->
+    <header class="top-nav" id="topNav">
+      <div class="brand-group">
+        <div class="logo-badge">
+          <svg class="yt-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+          </svg>
+          <span class="logo-multitag">DUAL</span>
+        </div>
+        <div class="brand-text">
+          <h1>DualStream <span class="badge-live">LIVE CHATS</span></h1>
+        </div>
+      </div>
+
+      <!-- Quick Action Controls -->
+      <div class="nav-actions">
+        <!-- Desktop Layout Selector -->
+        <div class="control-group layout-selectors" id="layoutControls">
+          <button class="btn-icon active" id="btnLayout5050" title="Side-by-Side 50/50" aria-label="Side-by-Side 50/50">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <line x1="12" y1="3" x2="12" y2="21"/>
+            </svg>
+            <span class="btn-label">50 / 50</span>
+          </button>
+          <button class="btn-icon" id="btnLayout6040" title="Focus 65/35" aria-label="Focus 65/35">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <line x1="15" y1="3" x2="15" y2="21"/>
+            </svg>
+            <span class="btn-label">Focus</span>
+          </button>
+          <button class="btn-icon" id="btnLayoutVertical" title="Vertical Stack" aria-label="Vertical Stack">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <line x1="3" y1="12" x2="21" y2="12"/>
+            </svg>
+            <span class="btn-label">Stack</span>
+          </button>
+        </div>
+
+        <!-- Toggle Stream Config Drawer -->
+        <button class="btn-secondary btn-toggle-config" id="btnToggleConfig" title="Toggle Stream URL Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          <span class="hide-mobile">Configure URLs</span>
+        </button>
+
+        <!-- OBS / Overlay Mode Button -->
+        <button class="btn-secondary" id="btnObsMode" title="Enter Clean / OBS Studio Overlay Mode">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+          </svg>
+          <span class="hide-mobile">OBS Mode</span>
+        </button>
+
+        <!-- Help / Guide Modal -->
+        <button class="btn-icon" id="btnOpenHelp" title="Setup Guide & Mobile Access">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Floating OBS Exit Button (Only visible in OBS Mode) -->
+    <button class="obs-exit-banner" id="btnExitObs" title="Click to exit clean overlay mode">
+      <span>OBS Clean Mode Active • Click or press ESC to show controls</span>
+    </button>
+
+    <!-- Collapsible Stream Setup Panel -->
+    <section class="config-panel" id="configPanel">
+      <div class="config-container">
+        <!-- Stream 1 Card -->
+        <div class="stream-input-card stream-card-1">
+          <div class="stream-card-header">
+            <div class="stream-tag tag-red">
+              <span class="dot-indicator dot-1"></span>
+              <input type="text" id="labelStream1" class="label-input" value="Channel 1 (Main)" placeholder="Channel 1 Name">
+            </div>
+            <span class="url-badge" id="statusStream1">Not Connected</span>
+          </div>
+          <div class="input-with-button">
+            <div class="input-wrapper">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+              </svg>
+              <input 
+                type="text" 
+                id="inputUrl1" 
+                placeholder="Paste YouTube Live URL, watch link, or ID..."
+                autocomplete="off"
+                spellcheck="false"
+              >
+            </div>
+            <button class="btn-action" id="btnLoadStream1" title="Load Stream 1">
+              Load
+            </button>
+          </div>
+        </div>
+
+        <!-- Center Swap & Helper Actions -->
+        <div class="config-center-tools">
+          <button class="btn-circle" id="btnSwapStreams" title="Swap Stream 1 and Stream 2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m16 3 4 4-4 4"/>
+              <path d="M20 7H4"/>
+              <path d="m8 21-4-4 4-4"/>
+              <path d="M4 17h16"/>
+            </svg>
+          </button>
+          <button class="btn-demo" id="btnLoadDemo" title="Load Sample Active Streams to Test">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+            Load Demo
+          </button>
+        </div>
+
+        <!-- Stream 2 Card -->
+        <div class="stream-input-card stream-card-2">
+          <div class="stream-card-header">
+            <div class="stream-tag tag-purple">
+              <span class="dot-indicator dot-2"></span>
+              <input type="text" id="labelStream2" class="label-input" value="Channel 2 (Secondary)" placeholder="Channel 2 Name">
+            </div>
+            <span class="url-badge" id="statusStream2">Not Connected</span>
+          </div>
+          <div class="input-with-button">
+            <div class="input-wrapper">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+              </svg>
+              <input 
+                type="text" 
+                id="inputUrl2" 
+                placeholder="Paste 2nd YouTube Live URL, watch link, or ID..."
+                autocomplete="off"
+                spellcheck="false"
+              >
+            </div>
+            <button class="btn-action" id="btnLoadStream2" title="Load Stream 2">
+              Load
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Options Bar -->
+      <div class="config-footer">
+        <div class="footer-left">
+          <label class="toggle-switch">
+            <input type="checkbox" id="checkShowVideos">
+            <span class="slider"></span>
+            <span class="toggle-text">Show Video Previews</span>
+          </label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="checkDarkChat" checked>
+            <span class="slider"></span>
+            <span class="toggle-text">Dark Chat Theme</span>
+          </label>
+        </div>
+        <div class="footer-right">
+          <button class="btn-link" id="btnClearAll">Clear Both</button>
+          <span class="save-status" id="saveIndicator">Saved locally</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mobile Segmented Navigation Switcher (Active on Mobile Screens) -->
+    <nav class="mobile-tabs" id="mobileTabs">
+      <button class="mobile-tab-btn active" data-tab="tab1" id="tabBtn1">
+        <span class="tab-dot dot-1"></span>
+        <span class="tab-text" id="tabText1">Channel 1</span>
+      </button>
+      <button class="mobile-tab-btn" data-tab="tab2" id="tabBtn2">
+        <span class="tab-dot dot-2"></span>
+        <span class="tab-text" id="tabText2">Channel 2</span>
+      </button>
+      <button class="mobile-tab-btn" data-tab="tabBoth" id="tabBtnBoth">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="tab-svg">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+        </svg>
+        <span class="tab-text">Both (Split)</span>
+      </button>
+    </nav>
+
+    <!-- Main Dual Chat Viewport -->
+    <main class="chat-viewport layout-5050" id="chatViewport">
+      <!-- Chat Pane 1 -->
+      <div class="chat-pane pane-1" id="pane1">
+        <div class="pane-header header-red">
+          <div class="pane-title-group">
+            <span class="live-pulse"></span>
+            <span class="pane-channel-title" id="paneTitle1">Channel 1</span>
+            <span class="pane-id-tag" id="paneId1">No Stream</span>
+          </div>
+          <div class="pane-controls">
+            <button class="pane-btn" id="btnToggleVideo1" title="Toggle mini video player">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="23 7 16 12 23 17 23 7"/>
+                <rect x="1" y="5" width="15" height="14" rx="2"/>
+              </svg>
+            </button>
+            <button class="pane-btn" id="btnPopout1" title="Open native YouTube chat popup window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+            </button>
+            <button class="pane-btn" id="btnReload1" title="Refresh this chat">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Optional Video Preview Player -->
+        <div class="video-preview-wrapper hidden" id="videoPreview1">
+          <iframe 
+            id="videoIframe1" 
+            src="" 
+            title="YouTube Video Stream 1" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen
+          ></iframe>
+        </div>
+
+        <!-- Chat Frame Container -->
+        <div class="iframe-container" id="chatFrameContainer1">
+          <div class="empty-state" id="emptyState1">
+            <div class="empty-icon-wrap icon-red">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <h3>Channel 1 Chat</h3>
+            <p>Paste a YouTube Live stream link or video ID above to display chat.</p>
+            <button class="btn-mini" onclick="document.getElementById('inputUrl1').focus()">Paste URL</button>
+          </div>
+          <iframe 
+            id="chatIframe1" 
+            class="chat-iframe hidden" 
+            src="" 
+            title="Stream 1 Live Chat"
+            frameborder="0"
+            sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+          ></iframe>
+        </div>
+      </div>
+
+      <!-- Chat Pane 2 -->
+      <div class="chat-pane pane-2" id="pane2">
+        <div class="pane-header header-purple">
+          <div class="pane-title-group">
+            <span class="live-pulse pulse-purple"></span>
+            <span class="pane-channel-title" id="paneTitle2">Channel 2</span>
+            <span class="pane-id-tag" id="paneId2">No Stream</span>
+          </div>
+          <div class="pane-controls">
+            <button class="pane-btn" id="btnToggleVideo2" title="Toggle mini video player">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="23 7 16 12 23 17 23 7"/>
+                <rect x="1" y="5" width="15" height="14" rx="2"/>
+              </svg>
+            </button>
+            <button class="pane-btn" id="btnPopout2" title="Open native YouTube chat popup window">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+            </button>
+            <button class="pane-btn" id="btnReload2" title="Refresh this chat">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Optional Video Preview Player -->
+        <div class="video-preview-wrapper hidden" id="videoPreview2">
+          <iframe 
+            id="videoIframe2" 
+            src="" 
+            title="YouTube Video Stream 2" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen
+          ></iframe>
+        </div>
+
+        <!-- Chat Frame Container -->
+        <div class="iframe-container" id="chatFrameContainer2">
+          <div class="empty-state" id="emptyState2">
+            <div class="empty-icon-wrap icon-purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <h3>Channel 2 Chat</h3>
+            <p>Paste your second YouTube Live stream link or video ID above.</p>
+            <button class="btn-mini" onclick="document.getElementById('inputUrl2').focus()">Paste URL</button>
+          </div>
+          <iframe 
+            id="chatIframe2" 
+            class="chat-iframe hidden" 
+            src="" 
+            title="Stream 2 Live Chat"
+            frameborder="0"
+            sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+          ></iframe>
+        </div>
+      </div>
+    </main>
+
+    <!-- Help & Architecture Guide Modal -->
+    <div class="modal-overlay hidden" id="helpModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <svg class="modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="16" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            <h2>How It Works & Setup Guide</h2>
+          </div>
+          <button class="modal-close-btn" id="btnCloseHelp" aria-label="Close modal">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="guide-section">
+            <h3>📱 Open on Your Mobile Phone</h3>
+            <p>Because you are running with <code>--host</code>, you can open this page on any phone or tablet connected to your local Wi-Fi!</p>
+            <div class="network-badge-box">
+              <span class="badge-label">Network Address:</span>
+              <code id="localNetworkAddress">http://localhost:5173</code>
+              <button class="btn-copy-code" id="btnCopyNetAddr">Copy</button>
+            </div>
+            <p class="tip-text">💡 Tip: On mobile, use the top tabs to quickly toggle between Channel 1, Channel 2, or both stacked!</p>
+          </div>
+
+          <div class="guide-section">
+            <h3>🔑 How YouTube Live Chat Embedding Works</h3>
+            <p>YouTube requires the live chat iframe to include an <code>embed_domain</code> parameter matching the website's exact hostname:</p>
+            <pre class="code-box"><code>https://www.youtube.com/live_chat?v=[VIDEO_ID]&embed_domain=[YOUR_HOSTNAME]&dark_theme=1</code></pre>
+            <ul class="bullet-list">
+              <li><strong>Domain Match:</strong> The app automatically reads your current browser hostname (e.g. <code>localhost</code>, <code>127.0.0.1</code>, or your LAN IP) and injects it into YouTube's API.</li>
+              <li><strong>Cookie Support:</strong> For participating or sending messages in chat, ensure your browser allows third-party cookies for YouTube.</li>
+              <li><strong>Popout Fallback:</strong> If YouTube requires direct sign-in, click the pop-out icon (<svg style="width:14px;height:14px;display:inline-block;vertical-align:middle;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>) in any chat header to open YouTube's native chat window.</li>
+            </ul>
+          </div>
+
+          <div class="guide-section">
+            <h3>🎥 OBS Studio Integration</h3>
+            <p>Want to capture this in OBS as a Browser Source?</p>
+            <ol class="ordered-list">
+              <li>Click <strong>OBS Mode</strong> in the top bar to strip all headers and controls.</li>
+              <li>In OBS Studio, add a new <strong>Browser Source</strong> and set URL to your local server URL (e.g. <code>http://localhost:5173</code>).</li>
+              <li>Set Width: <code>800</code> or <code>1920</code>, Height: <code>1080</code>.</li>
+            </ol>
+          </div>
+
+          <div class="guide-section">
+            <h3>🤖 Complete Master Prompt</h3>
+            <p>The full technical master prompt requested for AI replication is available in <a href="file:///d:/Team project/YT-Chat/PROMPT.md" class="doc-link">PROMPT.md</a> in your project root.</p>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-action" id="btnCloseHelpFooter">Got It</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
